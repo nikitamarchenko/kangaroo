@@ -1,0 +1,7 @@
+gunicorn
+pecan
+jsonschema
+pika
+requests
+libvirt-python
+jinja2

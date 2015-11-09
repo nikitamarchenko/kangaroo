@@ -1,0 +1,48 @@
+<domain type='qemu'>
+    <name>{{ name }}</name>
+    <currentMemory>262144</currentMemory>
+    <memory>262144</memory>
+    <os>
+        <type arch='x86_64'>hvm</type>
+        <boot dev='hd'/>
+    </os>
+    <features>
+        <acpi/>
+        <apic/>
+        <pae/>
+    </features>
+    <clock offset="utc"/>
+    <on_reboot>restart</on_reboot>
+    <on_crash>restart</on_crash>
+    <vcpu>1</vcpu>
+    <devices>
+        <emulator>/usr/bin/qemu-system-x86_64</emulator>
+        <disk type='file' device='disk'>
+            <driver name='qemu' type='qcow2'/>
+            <source file='/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'/>
+            <target dev='vda' bus='virtio'/>
+        </disk>
+        <disk type='block' device='cdrom'>
+            <target dev='hdc' bus='ide'/>
+            <readonly/>
+        </disk>
+        {% if br is defined %}
+        <interface type='bridge'>
+            <source bridge='{{ br }}'/>
+            <link state='up'/>
+        </interface>
+        {% else %}
+        <interface type='network'>
+            <source network='default'/>
+            <model type='virtio'/>
+        </interface>
+        {% endif %}
+        <input type='tablet' bus='usb'/>
+        <graphics type='vnc' port='-1'/>
+        <console type='pty'/>
+        <sound model='ac97'/>
+        <video>
+            <model type='cirrus'/>
+        </video>
+    </devices>
+</domain>
